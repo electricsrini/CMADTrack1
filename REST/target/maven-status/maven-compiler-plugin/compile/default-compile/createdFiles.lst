@@ -1,0 +1,4 @@
+com/cisco/cmad/UserManage.class
+com/cisco/cmad/HibernateUtil.class
+com/cisco/cmad/Users.class
+com/cisco/cmad/UserService.class
