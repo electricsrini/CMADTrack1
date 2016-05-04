@@ -30,10 +30,7 @@
 		<!-- Drop and re-create the database schema on startup -->
 		<property name="hibernate.hbm2ddl.auto">update</property>
 		
-		<mapping resource="com/cmad/blog/dao/Users.hbm.xml" />
-		<mapping resource="com/cmad/blog/dao/Blogs.hbm.xml" />
-		<mapping resource="com/cmad/blog/dao/Comments.hbm.xml" />
-		<mapping resource="com/cmad/blog/dao/SearchStrings.hbm.xml" />
-		<mapping resource="com/cmad/blog/dao/KeywordSearch.hbm.xml" />
+		<mapping resource="com/cmad/model/associations.hbm.xml" />
+		
 	</session-factory>
 </hibernate-configuration>

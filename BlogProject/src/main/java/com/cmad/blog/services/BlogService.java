@@ -11,6 +11,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
 import com.cmad.blog.dao.*;
+import com.cmad.blog.model.Blog;
 
 
 @Path("/blog")
@@ -34,9 +35,9 @@ public class BlogService {
 	@GET
 	@Path("/{param}")
 	@Produces({MediaType.APPLICATION_JSON})
-	public Blogs getBlog(@PathParam("param") Integer blogId) {
+	public Blog getBlog(@PathParam("param") Integer blogId) {
 		if (blogId == null) throw new IllegalArgumentException("Invalid blog Id passed, expected value, actual null");
-		Blogs b = blogDao.getBlogDao(blogId);
+		Blog b = blogDao.getBlogDao(blogId);
 		return b;
 	}
 	
@@ -49,11 +50,11 @@ public class BlogService {
 	 */
 	
 	@GET
-	@Path("/{param}")
+	@Path("/?title={param}")
 	@Produces({MediaType.APPLICATION_JSON})
-	public List<Blogs> getBlog(@PathParam("param") String title) {
+	public List<Blog> getBlogByTitle(@PathParam("param") String title) {
 		if (title == null) throw new IllegalArgumentException("Invalid Title passed, expected value, actual null");
-		List<Blogs> b = blogDao.getBlogDao(title);
+		List<Blog> b = blogDao.getBlogByTitleDao(title);
 		return b;
 	}
 	
@@ -66,11 +67,11 @@ public class BlogService {
 	 */
 	
 	@GET
-	@Path("/key/{param}")
+	@Path("/?tag={param}")
 	@Produces({MediaType.APPLICATION_JSON})
-	public List<Blogs> getSearchBlog(@PathParam("param") String searchKey) {
+	public List<Blog> getSearchBlog(@PathParam("param") String searchKey) {
 		if (searchKey == null) throw new IllegalArgumentException("Invalid searchKey passed, expected value, actual null");
-		List<Blogs> b = blogDao.getBlogDao(searchKey);
+		List<Blog> b = blogDao.getSearchBlogDao(searchKey);
 		return b;
 	}
 	
@@ -82,8 +83,8 @@ public class BlogService {
 	
 	@GET
 	@Produces({MediaType.APPLICATION_JSON})
-	public List<Blogs> getBlogs() {
-		List<Blogs> blogs = blogDao.getBlogsDao();
+	public List<Blog> getBlogs() {
+		List<Blog> blogs = blogDao.getBlogsDao();
 		return blogs;
 	}
 	
@@ -96,7 +97,7 @@ public class BlogService {
 	
 	@POST
 	@Consumes({MediaType.APPLICATION_JSON})
-	public Integer createBlog (Blogs b) {
+	public Integer createBlog (Blog b) {
 		int id = 0;
 		
 		System.out.println("createBlog :: blog :" + b);

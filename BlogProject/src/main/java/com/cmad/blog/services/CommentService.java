@@ -11,6 +11,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
 import com.cmad.blog.dao.*;
+import com.cmad.blog.model.Comment;
 
 @Path("/comment")
 
@@ -25,21 +26,21 @@ public class CommentService {
 	@GET
 	@Path("/{param}")
 	@Produces({MediaType.APPLICATION_JSON})
-	public Comments getComment(@PathParam("param") Integer commentId) {
-		Comments c = commentDao.getCommentDao(commentId);
+	public Comment getComment(@PathParam("param") Integer commentId) {
+		Comment c = commentDao.getCommentDao(commentId);
 		return c;
 	}
 	
 	@GET
 	@Produces({MediaType.APPLICATION_JSON})
-	public List<Comments> getComments() {
-		List<Comments> comments = commentDao.getCommentsDao();
+	public List<Comment> getComments() {
+		List<Comment> comments = commentDao.getCommentsDao();
 		return comments;
 	}
 	
 	@POST
 	@Consumes({MediaType.APPLICATION_JSON})
-	public void createComment (Comments c) {
+	public void createComment (Comment c) {
 		commentDao.createComment(c);
 	}
 

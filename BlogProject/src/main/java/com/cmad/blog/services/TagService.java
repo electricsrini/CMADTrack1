@@ -11,15 +11,17 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
 import com.cmad.blog.dao.*;
+import com.cmad.blog.model.Tag;
+import com.cmad.blog.model.TagList;
 
 @Path("/keyword")
 
-public class KeywordService {
+public class TagService {
 	
-	private KeywordServiceDao keywordDao;
+	private TagDao tagDao;
 	
-	public KeywordService() {
-		keywordDao = new KeywordServiceDao();
+	public TagService() {
+		tagDao = new TagDao();
 	}
 	
 	/**
@@ -33,9 +35,9 @@ public class KeywordService {
 	@GET
 	@Path("/{param}")
 	@Produces({MediaType.APPLICATION_JSON})
-	public KeywordSearch getKeyword(@PathParam("param") Integer keyId) {
+	public Tag getKeyword(@PathParam("param") Integer keyId) {
 		if (keyId == null) throw new IllegalArgumentException("Invalid keyId passed, expected value, passed Null");
-		KeywordSearch k = keywordDao.getKeywordDao(keyId);
+		Tag k = tagDao.getKeywordDao(keyId);
 		return k;
 	}
 	
@@ -47,8 +49,8 @@ public class KeywordService {
 	
 	@GET
 	@Produces({MediaType.APPLICATION_JSON})
-	public List<KeywordSearch> getKeywords() {
-		List<KeywordSearch> keywords = keywordDao.getKeywordsDao();
+	public List<Tag> getKeywords() {
+		List<Tag> keywords = tagDao.getKeywordsDao();
 		return keywords;
 	}
 	
@@ -61,11 +63,11 @@ public class KeywordService {
 	 */
 	
 	@GET
-	@Path("/keyword/{param}")
+	@Path("/?tag={param}")
 	@Produces({MediaType.APPLICATION_JSON})
-	public SearchStrings getKeyword(@PathParam("param") String searchKey) {
+	public TagList getKeyword(@PathParam("param") String searchKey) {
 		if (searchKey == null) throw new IllegalArgumentException("Invalid searchKey passed, expected value, passed Null");
-		SearchStrings k = keywordDao.getKeywordDao(searchKey);
+		TagList k = tagDao.getKeywordDao(searchKey);
 		return k;
 	}
 	
@@ -78,15 +80,15 @@ public class KeywordService {
 	
 	@POST
 	@Consumes({MediaType.APPLICATION_JSON})
-	public Integer createKeyword (SearchStrings s) {
+	public Integer createKeyword (TagList s) {
 		int id = 0;
-		keywordDao.createKeyword(s);
+		tagDao.createKeyword(s);
 		return id;
 	}
 	
-	public Integer createKeyword (KeywordSearch k) {
+	public Integer createKeyword (Tag k) {
 		int id = 0;
-		keywordDao.createKeyword(k);
+		tagDao.createKeyword(k);
 		return id;
 	}
 

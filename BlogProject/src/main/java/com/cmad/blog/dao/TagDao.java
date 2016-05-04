@@ -7,7 +7,10 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.criterion.Restrictions;
 
-public class KeywordServiceDao {
+import com.cmad.blog.model.Tag;
+import com.cmad.blog.model.TagList;
+
+public class TagDao {
 
 	/**
 	 * Get the keyword object for the keyId provided.
@@ -17,13 +20,13 @@ public class KeywordServiceDao {
 	 * @throws IllegalArgumentException in case the keyword provided for search is <code>Null</code>
 	 */
 	
-	public KeywordSearch getKeywordDao (Integer keyId){
+	public Tag getKeywordDao (Integer keyId){
 		if (keyId == null) throw new IllegalArgumentException("Invalid keyId passed, expected value, passed Null");
 		Session ses = HibernateUtil.currentSession();
 		try {
-			Criteria crit =  ses.createCriteria(KeywordSearch.class);
+			Criteria crit =  ses.createCriteria(Tag.class);
 			crit.add(Restrictions.idEq(keyId));
-			KeywordSearch k = (KeywordSearch)crit.uniqueResult();
+			Tag k = (Tag)crit.uniqueResult();
 			return k;
 		} finally {
 			HibernateUtil.closeSession();
@@ -36,10 +39,10 @@ public class KeywordServiceDao {
 	 * @return List of all KeywordSearch objects in the database
 	 */
 	
-	public List<KeywordSearch> getKeywordsDao() {
+	public List<Tag> getKeywordsDao() {
 		Session ses = HibernateUtil.currentSession();
 		try {
-			return ses.createCriteria(KeywordSearch.class).list();
+			return ses.createCriteria(Tag.class).list();
 		} finally {
 			HibernateUtil.closeSession();
 		}
@@ -58,10 +61,10 @@ public class KeywordServiceDao {
 		if (searchKey == null) throw new IllegalArgumentException("Invalid searchKey passed, expected value, actual null");
 		Session ses = HibernateUtil.currentSession();
 		
-			Criteria crit =  ses.createCriteria(SearchStrings.class);	
+			Criteria crit =  ses.createCriteria(TagList.class);	
 			crit.add(Restrictions.eq("searchKey",searchKey).ignoreCase());
-			SearchStrings s = (SearchStrings)crit.uniqueResult();
-			return s.getKeyId();
+			TagList s = (TagList)crit.uniqueResult();
+			return s.getTagId();
 		 
 	}
 	
@@ -73,14 +76,14 @@ public class KeywordServiceDao {
 	 * @throws IllegalArgumentException in case the keyword provided for search is <code>Null</code>
 	 */
 	
-	public SearchStrings getKeywordDao (String searchKey){
+	public TagList getKeywordDao (String searchKey){
 		if (searchKey == null) throw new IllegalArgumentException("Invalid searchKey passed, expected value, passed Null");
 		int keyId = getKeyId(searchKey);
 		Session ses = HibernateUtil.currentSession();
 		try {
-			Criteria crit =  ses.createCriteria(KeywordSearch.class);
+			Criteria crit =  ses.createCriteria(Tag.class);
 			crit.add(Restrictions.idEq(keyId));
-			SearchStrings k = (SearchStrings)crit.uniqueResult();
+			TagList k = (TagList)crit.uniqueResult();
 			return k;
 		} finally {
 			HibernateUtil.closeSession();
@@ -94,34 +97,34 @@ public class KeywordServiceDao {
 	 * @return keyId of the entry that is made is returned
 	 */
 	
-	public Integer createKeyword (SearchStrings s) {
+	public Integer createKeyword (TagList s) {
 		int id = 0;
-		System.out.println("Creating keyword entry: "+s.getSearchKey());
+		System.out.println("Creating keyword entry: "+s.getTagString());
 		Session ses = HibernateUtil.currentSession();
-		if (getKeyId(s.getSearchKey()) == null){
+		if (getKeyId(s.getTagString()) == null){
 			try {
 			Transaction tx = ses.beginTransaction();
 			ses.save(s);
-			id = s.getKeyId();
+			id = s.getTagId();
 			tx.commit();
 		}finally{
 			HibernateUtil.closeSession();
 		}
 		return id;
 		}
-		id = getKeyId(s.getSearchKey());
+		id = getKeyId(s.getTagString());
 		return id;
 		
 	}
 	
-	public Integer createKeyword (KeywordSearch k) {
+	public Integer createKeyword (Tag k) {
 		int id = 0;
-		System.out.println("Creating keyword entry: "+k.getKeyId()+" and it is associated to "+k.getBlogId());
+		System.out.println("Creating keyword entry: "+k.getTagId()+" and it is associated to "+k.getBlogId());
 		Session ses = HibernateUtil.currentSession();
 		try {
 			Transaction tx = ses.beginTransaction();
 			ses.save(k);
-			id = k.getKeyId();
+			id = k.getTagId();
 			tx.commit();
 		}finally{
 			HibernateUtil.closeSession();

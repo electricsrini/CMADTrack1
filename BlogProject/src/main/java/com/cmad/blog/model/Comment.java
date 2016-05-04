@@ -1,35 +1,33 @@
-package com.cmad.blog.dao;
+package com.cmad.blog.model;
 
 
 import java.util.Date;
 
 
-public class Comments {
+public class Comment {
+	
+	private User user;
+	public Comment(){
+		user = new User();
+	}
 
 	private Integer commentId;
-	private Integer blogId;
-	private Integer userId;
 	private Date entryDate=new Date();
 	private String content="";
 	private Integer parentId;
 	private Integer rank;
+	
+	public User getUser() {
+		return user;
+	}
+	public void setUser(User user) {
+		this.user = user;
+	}
 	public Integer getCommentId() {
 		return commentId;
 	}
 	public void setCommentId(Integer commentId) {
 		this.commentId = commentId;
-	}
-	public Integer getBlogId() {
-		return blogId;
-	}
-	public void setBlogId(Integer blogId) {
-		this.blogId = blogId;
-	}
-	public Integer getUserId() {
-		return userId;
-	}
-	public void setUserId(Integer userId) {
-		this.userId = userId;
 	}
 	public Date getEntryDate() {
 		return entryDate;
@@ -58,9 +56,13 @@ public class Comments {
 	
 	@Override
 	public String toString() {
-		return "Comments [commentId=" + commentId + ", blogId=" + blogId + ", userId=" + userId + ", entryDate="
-				+ entryDate + ", content=" + content + ", parentId=" + parentId + ", rank=" + rank + "]";
+		return "Comment [user=" + user + ", commentId=" + commentId + ", entryDate=" + entryDate
+				+ ", content=" + content + ", parentId=" + parentId + ", rank=" + rank + "]";
 	}
+	
+	
+	
+	
 
 	
 	

@@ -8,11 +8,13 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.criterion.Restrictions;
 
+import com.cmad.blog.model.*;
+
 public class BlogServiceDao {
 	
-	private KeywordServiceDao keyDao;
+	private TagDao tagDao;
 	public BlogServiceDao(){
-		keyDao = new KeywordServiceDao();
+		tagDao = new TagDao();
 	}
 	
 	/**
@@ -23,13 +25,13 @@ public class BlogServiceDao {
 	 * @throws IllegalArgumentException in case the blog Id passed is <code>Null</code>
 	 */
 	
-	public Blogs getBlogDao (Integer blogId){
+	public Blog getBlogDao (Integer blogId){
 		if (blogId == null) throw new IllegalArgumentException("Invalid blog Id passed, expected value, actual null");
 		Session ses = HibernateUtil.currentSession();
 		try {
-			Criteria crit =  ses.createCriteria(Blogs.class);
+			Criteria crit =  ses.createCriteria(Blog.class);
 			crit.add(Restrictions.idEq(blogId));
-			Blogs b = (Blogs)crit.uniqueResult();
+			Blog b = (Blog)crit.uniqueResult();
 			return b;
 		} finally {
 			HibernateUtil.closeSession();
@@ -44,13 +46,13 @@ public class BlogServiceDao {
 	 * @throws IllegalArgumentException in case the title passed is <code>Null</code>
 	 */
 	
-	public List<Blogs> getBlogDao (String title){
+	public List<Blog> getBlogByTitleDao (String title){
 		if (title == null) throw new IllegalArgumentException("Invalid title passed, expected value, actual null");
 		Session ses = HibernateUtil.currentSession();
 		try {
-			Criteria crit =  ses.createCriteria(Blogs.class);
+			Criteria crit =  ses.createCriteria(Blog.class);
 			crit.add(Restrictions.eq("title", title).ignoreCase());
-			List<Blogs> b = crit.list();
+			List<Blog> b = crit.list();
 			return b;
 		} finally {
 			HibernateUtil.closeSession();
@@ -65,14 +67,14 @@ public class BlogServiceDao {
 	 * @throws IllegalArgumentException in case the search keystring passed is <code>Null</code>
 	 */
 	
-	public List<Blogs> getSearchBlogDao (String searchkey){
+	public List<Blog> getSearchBlogDao (String searchkey){
 		if (searchkey == null) throw new IllegalArgumentException("Invalid searchKey passed, expected value, actual null");
-		int KeyId = keyDao.getKeyId(searchkey);
+		int KeyId = tagDao.getKeyId(searchkey);
 		Session ses = HibernateUtil.currentSession();
 		try {
-			Criteria crit =  ses.createCriteria(KeywordSearch.class);
+			Criteria crit =  ses.createCriteria(Tag.class);
 			crit.add(Restrictions.eq("keyId", KeyId));
-			List<Blogs> b = crit.list();
+			List<Blog> b = crit.list();
 			return b;
 		} finally {
 			HibernateUtil.closeSession();
@@ -87,17 +89,17 @@ public class BlogServiceDao {
 	 * @return A list of all blogs in the database
 	 */
 	
-	public List<Blogs> getBlogsDao() {
+	public List<Blog> getBlogsDao() {
 		Session ses = HibernateUtil.currentSession();
 		try {
-			return ses.createCriteria(Blogs.class).list();
+			return ses.createCriteria(Blog.class).list();
 		} finally {
 			HibernateUtil.closeSession();
 		}
 	}
 	
-	public Integer createBlog (Blogs b) {
-		System.out.println("Creating blog with title : "+b.getTitle()+" for "+b.getUserId()+" on "+b.getEntryDate());
+	public Integer createBlog (Blog b) {
+		System.out.println("Creating blog with title : "+b.getTitle()+" on "+b.getEntryDate());
 		int id=0;
 		Session ses = HibernateUtil.currentSession();
 		try {

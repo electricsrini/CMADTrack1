@@ -2,7 +2,7 @@
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
 "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
-	<class name="com.cmad.blog.dao.Users" table="USERS" schema="CMADBlog" >
+	<class name="com.cmad.blog.model.User" table="USERS" schema="CMADBlog" >
 		<meta attribute="class-description">
 			This class contains User description
 		</meta>
@@ -37,9 +37,20 @@
 		<property name="city" type="string">
 			<column name="CITY" length="25" />
 		</property>
+		
+		<set name="blogs" inverse="true" cascade="save-update" lazy="false">
+			<key column="USERID"/>
+			<one-to-many class="com.cmad.blog.model.Blog"/>
+		</set>
+		
+		<set name="comments" inverse="true" cascade="save-update" lazy="false">
+			<key column="USERID"/>
+			<one-to-many class="com.cmad.blog.model.Comment"/>
+		</set>
+		
 	</class>
 	
-	<class name="com.cmad.blog.dao.Blogs" table="BLOGS" schema="CMADBlog" >
+	<class name="com.cmad.blog.model.Blog" table="BLOGS" schema="CMADBlog" >
 		<meta attribute="class-description">
 			This class contains Blog description
 		</meta>
@@ -60,19 +71,24 @@
 			<column name="ENTRY_DATE" length="29" />
 		</property>
 		
-		<property name="userId" type="int">
-			<column name="USERID" />
-		</property>
-		
-		<!--  <many-to-one name="userId" class="com.cmad.blog.dao.Users"
-			column="USERID" not-null="true"  /> -->
-		
 		<property name="rank" type="int">
 			<column name="RANK" />
 		</property>
+		
+		<set name="comments" inverse="true" cascade="save-update" lazy="false">
+			<key column="BLOGID"/>
+			<one-to-many class="com.cmad.blog.model.Comment"/>
+		</set>
+		
+		<set name="tags" inverse="true" cascade="save-update" lazy="false">
+			<key column="BLOGID"/>
+			<one-to-many class="com.cmad.blog.model.Tag"/>
+		</set>
+		
+		
 	</class>
 	
-	<class name="com.cmad.blog.dao.Comments" table="COMMENTS" schema="CMADBlog" >
+	<class name="com.cmad.blog.model.Comment" table="COMMENTS" schema="CMADBlog" lazy="true">
 		
 		<meta attribute="class-description">
 			This class contains Comments description
@@ -82,20 +98,6 @@
 			<column name="COMMENTID" />
 			<generator class="native" />
 		</id>
-		
-		<property name="blogId" type="int">
-			<column name="BLOGID" />
-		</property>
-		
-		<!--  <many-to-one name="blogId" class="com.cmad.blog.dao.Blogs"
-			column="BLOGID" not-null="true" /> -->
-		
-		<property name="userId" type="int">
-			<column name="USERID" />
-		</property>
-		
-		<!-- <many-to-one name="userId" class="com.cmad.blog.dao.Users"
-			column="USERID" not-null="true" />  -->
 		
 		<property name="entryDate" type="timestamp">
 			<column name="ENTRY_DATE" length="29" />
@@ -109,50 +111,57 @@
 		<property name="rank" type="int">
 			<column name="RANK" />
 		</property>
+		
 	</class>
 	
-	<class name="com.cmad.blog.dao.SearchStrings" table="SEARCHSTRINGS" schema="CMADBlog" >
+	<class name="com.cmad.blog.model.TagList" table="TAGLIST" schema="CMADBlog" lazy="true">
 		
 		<meta attribute="class-description">
-			This class contains Search String description
+			This class contains Tag ID and its String description
 		</meta>
 		
-		<id name="keyId" type="int">
-			<column name="KEYID" />
+		<id name="tagId" type="int">
+			<column name="TAGID" />
 			<generator class="native" />
 		</id>
 		
-		<property name="searchKey" type="string">
-			<column name="SEARCHKEY" length="200" />
-		</property>		
+		<property name="tagString" type="string">
+			<column name="TAGSTRING" length="200" />
+		</property>	
+		
+		<set name="tags" inverse="true" cascade="save-update" lazy="false">
+			<key column="TAGID"/>
+			<one-to-many class="com.cmad.blog.model.Tag"/>
+		</set>
+		
 		
 	</class>
 	
-	<class name="com.cmad.blog.dao.KeywordSearch" table="KEYWORDSEARCH" schema="CMADBlog" >
+	<class name="com.cmad.blog.model.Tag" table="TAG" schema="CMADBlog" lazy="true">
 		
 		<meta attribute="class-description">
-			This class contains Keystring and Blog Id description
+			This class contains Tag Id and Blog Id description
 		</meta>
 		
-		<id name="Id" type="int">
+		<!-- <id name="Id" type="int">
 			<column name="ID" />
 			<generator class="native" />
-		</id>
+		</id>  -->
 		
-		<!-- <many-to-one name="keyId" class="com.cmad.blog.dao.SearchStrings"
-			column="KEYID" not-null="true" />  -->
+		<!-- <property name="keyId" type="int">
+			<column name="keyId" /> 
+		</property>  -->
 		
-		<property name="keyId" type="int">
-			<column name="BLOGID" />
-		</property>
+		<!-- <property name="blogId" type="int">
+			<column name="BLOGID" /> 
+		</property>  -->
 		
-		<!-- <many-to-one name="blogId" class="com.cmad.blog.dao.Blogs"
-			column="BLOGID" not-null="true" />  -->
-		
-		<property name="blogId" type="int">
-			<column name="BLOGID" />
-		</property>
-		
+		<composite-id>
+			<key-property name="tagId"/>
+			<key-property name="blogId"/>
+		</composite-id>
+	
 	</class>
+
 	
 </hibernate-mapping>

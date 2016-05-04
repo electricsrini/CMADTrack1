@@ -19,6 +19,8 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 
 import com.cmad.blog.dao.*;
+import com.cmad.blog.model.Blog;
+import com.cmad.blog.model.User;
 
 
 @Path("/user")
@@ -45,9 +47,9 @@ public class UserService {
 	@GET
 	@Path("/{param}")
 	@Produces({MediaType.APPLICATION_JSON})	
-	public Users getUser(@PathParam("param") Integer userId) {
+	public User getUser(@PathParam("param") Integer userId) {
 		if (userId == null) throw new IllegalArgumentException("Invalid userid passed, expected value, actual null"); 
-		Users u = userDao.getUserDao(userId);
+		User u = userDao.getUserDao(userId);
 		return u;
 	}
 	
@@ -59,8 +61,8 @@ public class UserService {
 	
 	@GET
 	@Produces({MediaType.APPLICATION_JSON})
-	public List<Users> getUsers() {
-		List<Users> users = userDao.getUsersDao();		
+	public List<User> getUsers() {
+		List<User> users = userDao.getUsersDao();		
 		return users;
 	}
 	
@@ -74,11 +76,11 @@ public class UserService {
 	 */
 	
 	@GET
-	@Path("/email/{param}")
+	@Path("/?email={param}")
 	@Produces({MediaType.APPLICATION_JSON})
-	public Users getUser(@PathParam("param") String emailId) {
+	public User getUser(@PathParam("param") String emailId) {
 		if (emailId == null) throw new IllegalArgumentException("Invalid email ID passed, expected value, actual null");
-		Users u = userDao.getUserDao(emailId);
+		User u = userDao.getUserDao(emailId);
 		return u;
 	}
 	
@@ -91,11 +93,11 @@ public class UserService {
 	 */
 	
 	@GET
-	@Path("/blog/email/{param}")
+	@Path("/blog/?email={param}")
 	@Produces({MediaType.APPLICATION_JSON})
-	public List<Blogs> getBlogs(@PathParam("param") String emailId) {
+	public List<Blog> getBlogs(@PathParam("param") String emailId) {
 		if (emailId == null) throw new IllegalArgumentException("Invalid email ID passed, expected value, actual null");
-		List<Blogs> b = userDao.getBlogsDao(emailId);
+		List<Blog> b = userDao.getBlogsDao(emailId);
 		return b;
 	}
 	
@@ -108,7 +110,7 @@ public class UserService {
 	
 	@POST
 	@Consumes({MediaType.APPLICATION_JSON})
-	public Integer createUser (Users u) {
+	public Integer createUser (User u) {
 		int id = 0;
 		userDao.createUser(u);
 		return id;

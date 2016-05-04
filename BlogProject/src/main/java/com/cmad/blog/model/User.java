@@ -1,20 +1,24 @@
-package com.cmad.blog.dao;
+package com.cmad.blog.model;
 
 import java.util.Date;
+import java.util.Set;
 
 
-public class Users {
+public class User {
 
 	private Integer userId;
-	private String firstName="";
-	private String lastName="";
-	private String emailId="";
-	private String password="";
+	private String firstName;
+	private String lastName;
+	private String emailId;
+	private String password;
 	private Date joinDate=new Date();
 	private Integer age;
-	private String country="";
-	private String state="";
-	private String city="";
+	private String country;
+	private String state;
+	private String city;
+	
+	private Set<Blog> blogs;
+	private Set<Comment> comments;
 	public Integer getUserId() {
 		return userId;
 	}
@@ -75,14 +79,24 @@ public class Users {
 	public void setCity(String city) {
 		this.city = city;
 	}
+	public Set<Blog> getBlogs() {
+		return blogs;
+	}
+	public void setBlogs(Set<Blog> blogs) {
+		this.blogs = blogs;
+	}
+	public Set<Comment> getComments() {
+		return comments;
+	}
+	public void setComments(Set<Comment> comments) {
+		this.comments = comments;
+	}
 	@Override
 	public String toString() {
-		return "Users [userId=" + userId + ", firstName=" + firstName + ", lastName=" + lastName + ", emailId="
-				+ emailId + ", password=" + password + ", joinDate=" + joinDate + ", age=" + age + ", country="
-				+ country + ", state=" + state + ", city=" + city + "]";
+		return "User [userId=" + userId + ", firstName=" + firstName + ", lastName=" + lastName + ", emailId=" + emailId
+				+ ", password=" + password + ", joinDate=" + joinDate + ", age=" + age + ", country=" + country
+				+ ", state=" + state + ", city=" + city + ", blogs=" + blogs + ", comments=" + comments + "]";
 	}
-
-	
 	
 	
 
